@@ -1,0 +1,87 @@
+\documentclass[preprint,3p,twocolumn,times,authoryear]{elsarticle}
+
+\usepackage{wrapfig}
+\usepackage[font=small]{caption}
+\usepackage{subcaption}
+\usepackage{amsmath}
+\usepackage{geometry}
+\usepackage{url}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{stfloats}
+
+\DeclareMathOperator\erf{erf}
+
+%%%%%%%%%%%%%%%%%%%%%%%
+%% Elsevier bibliography styles
+%%%%%%%%%%%%%%%%%%%%%%%
+%% To change the style, put a % in front of the second line of the current style and
+%% remove the % from the second line of the style you would like to use.
+%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Numbered
+%\bibliographystyle{model1-num-names}
+
+%% Numbered without titles
+%\bibliographystyle{model1a-num-names}
+
+%% Harvard
+\bibliographystyle{model2-names}\biboptions{authoryear}
+
+%% Vancouver numbered
+%\usepackage{numcompress}\bibliographystyle{model3-num-names}
+
+%% Vancouver name/year
+%\usepackage{numcompress}\bibliographystyle{model4-names}\biboptions{authoryear}
+
+%% APA style
+%\bibliographystyle{model5-names}\biboptions{authoryear}
+
+%% AMA style
+%\usepackage{numcompress}\bibliographystyle{model6-num-names}
+
+%% `Elsevier LaTeX' style
+%\bibliographystyle{elsarticle-num}
+%%%%%%%%%%%%%%%%%%%%%%%
+
+\journal{Icarus}
+
+\begin{document}
+
+\begin{frontmatter}
+
+\title{A comparison of the Block and Full Acoustic Fluidization Models}
+
+\author[label1]{Hamish C. F. C. Hay}
+\author[label2]{Gareth S. Collins}
+\author[label2]{Tom M. Davison}
+\address[label1]{Lunar and Planetary Laboratory, University of Arizona, Tucson, AZ 85719, United States}
+\address[label2]{Impacts and Astromaterials Research Centre, Department of Earth Science and Engineering, Imperial College London, London, SW7 2BP, United Kingdom}
+
+\begin{keyword}
+impact processes\sep cratering
+\end{keyword}
+
+\begin{abstract}
+
+\noindent During the collapse of large impact craters, an extraordinary degree of rock weakening occurs. Current models fail to predict localised weakening, thus only broad-scale crater characteristics are reproduced. Acoustic fluidisation is a physical mechanism that describes localised weakening via the action of acoustic vibrations. In this work, the iSALE impact cratering hydrocode is successfully modified to include the full Melosh model of acoustic fluidisation. A comparison between the Melosh model and a widely used alternative, the block model, was carried out. The two models were found to be most similar for generation of simple craters; however, complex crater collapse in the block model is facilitated  by a deep weakening, whereas shallow weakening results in crater collapse for the Melosh model. The Melosh model of acoustic fluidisation is shown to be an effective model of dynamic weakening, differing from the block model by its style of crater collapse and peak ring formation.
+
+\end{abstract}
+\end{frontmatter}
+
+\input{./introduction.tex}
+
+\input{./methodology.tex}
+
+\input{./results.tex}
+
+\input{./discussion.tex}
+
+\input{./conclusion.tex}
+
+\section*{References}
+\bibliography{msci_biblio}
+
+\input{./appendix.tex}
+
+\end{document}

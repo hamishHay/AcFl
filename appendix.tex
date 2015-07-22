@@ -1,0 +1,101 @@
+\appendix
+
+\section{Modifications to iSALE} \label{app:modifications}
+
+To apply the Melosh model in the iSALE hydrocode, two main algorithms were applied to the iSALE time loop: (1) (re)generation and movement of acoustic energy, and (2) the effect of acoustic vibrations on the strength of the rock medium.
+
+\subsubsection{Dissipation and Regeneration \label{sec:dissandregen}}
+
+iSALE updates each cell's energy value at every new timestep using the stored values from the previous timestep, hence, at timestep number $n$:
+
+\begin{equation}\label{eq:iSaleStep}
+\mathcal{E}_{v_{n}} = \mathcal{E}_{v_{n-1}} + d\mathcal{E}_{scatter} + d\mathcal{E}_{dissipation} + d\mathcal{E}_{regeneration},\vspace{0.2cm}
+\end{equation}
+
+where $d\mathcal{E}_{scatter}$, $d\mathcal{E}_{dissipation}$, and $d\mathcal{E}_{regeneration}$ represent the three terms on the right hand side of equation \ref{eqdedtmass} respectively \citep{collins2003acoustic}.
+
+The dissipation and regeneration terms were relatively simple to compute in the iSALE code, evaluated as follows:
+\vspace{0.0cm}
+\begin{eqnarray}
+d\mathcal{E}_{dissipation} &=& \frac{c_{p}}{\lambda Q}\mathcal{E}_{v_{n-1}}\, dt \\
+d\mathcal{E}_{regeneration} &=& De \frac{\tau \dot{\epsilon}}{2\rho}\, dt\, . \label{eq:regen_term}
+\end{eqnarray}
+
+
+$D$ represents the damage parameter; a value between zero and unity which describes how 'damaged' the rock material is \citep{collins2004modeling}. In this case, it acts to switch off generation of acoustic energy. For a region of undamaged material: when $D=1$, damage is at a maximum, and therefore so is $d\mathcal{E}_{regeneration}$.
+
+For each cell, the internal energy was also updated as energy became available for regeneration. This was done by adapting equation \ref{eq:iSaleInternalEnergyAcoustic} to give the internal energy of each cell at timestep number $n$:
+
+\begin{equation}\label{eq:internalEnergydt}
+I_{n} = I_{n-1} + \frac{1}{\rho}\left[\frac{d \left(p + q\right)}{d t} + \tau \dot{\epsilon}\left(1-\frac{e}{2}\right)+\mathcal{E}_{dissipation}\right] dt.\vspace{0.2cm}
+\end{equation}
+ 
+Small stresses and strain rates may result in the generation of acoustic energy, as equation \ref{eq:regen_term} predicts. However, regions with extremely low strain rates far away from the point of impact would normally be mostly unaffected by the impact. To restrict acoustic fluidisation in these areas, a strain rate limit of $3\times10^{-3}$ s$^{-1}$ was set, i.e., for a cell with a strain rate lower than this value, $d\mathcal{E}_{regeneration}=0$.
+
+\subsubsection{Scattering \label{sec:scatter}}
+
+As iSALE can either use cartesian or cylindrical coordinates when run in 2D, it was important to provide a convenient method for switching the Laplace equation in the scattering term between these two coordinate systems. This was achieved by using a binary variable $cyl$, used in iSALE. $cyl$ takes the value of either 0 or 1, representing a cartesian or cylindrical coordinate system respectively.
+
+The full expansion of the scatter term in cylindrical coordinates (equation \ref{eq:cyldiff}) was derived using the product rule, giving:
+
+\begin{equation}\label{eq:scatter_expand}
+\frac{d \mathcal{E}_{v} }{d t} = \frac{\xi}{4} \left(\frac{1}{r} \frac{d \mathcal{E}_{v}}{dr} + \frac{d^{2} \mathcal{E}_{v}}{dr^{2}} + \frac{d^{2} \mathcal{E}_{v}}{dz^{2}} \right),\vspace{0.2cm}
+\end{equation}
+
+where $r$ and $z$ are the cylinder radius and height, respectively. Applying the $cyl$ variable to this results in a convenient switch between the cartesian and cylindrical form of the Laplace equation:
+
+\begin{equation}
+\frac{d \mathcal{E}_{v} }{d t} = \frac{\xi}{4} \left(cyl\,\frac{1}{r} \frac{d \mathcal{E}_{v}}{dr} + \frac{d^{2} \mathcal{E}_{v}}{dr^{2}} + \frac{d^{2} \mathcal{E}_{v}}{dz^{2}} \right),\vspace{0.2cm}
+\end{equation}
+
+where $r$ and $z$ become $x$ and $y$ for a cartesian coordinate system. When $cyl=0$, the $1/r$ term is dropped. If $cyl=1$, then equation \ref{eq:scatter_expand} remains as it is. Thus, the scatter term becomes:
+
+\begin{equation}
+\mathcal{E}_{scatter} = \frac{\xi}{4} \left(cyl\,\frac{1}{r} \frac{d \mathcal{E}_{v}}{dr} + \frac{d^{2} \mathcal{E}_{v}}{dr^{2}} + \frac{d^{2} \mathcal{E}_{v}}{dz^{2}} \right)dt,\vspace{0.2cm}
+\end{equation}
+
+where it is added to the new specific acoustic energy, as in equation \ref{eq:iSaleStep}.
+
+\subsubsection{Strength Model \label{sec:strength}}
+
+\begin{sloppypar}
+The effect of acoustic fluidisation on the rock strength, discussed in section \ref{sec:acfl}, was implemented in the \citet{collins2004modeling} strength model. iSALE updates the yield strength, $Y$, of the cells according to the user selected strength model at every time step. Yield strength is defined as:
+\end{sloppypar}
+
+\begin{equation} \label{eq:yield}
+Y=\mu p, \vspace{0.2cm}
+\end{equation}
+
+where $\mu$ is the coefficient of friction, and $p$ is the overburden pressure. The critical pressure amplitude for sliding to occur, $s_{c}$, is defined as:
+
+\begin{equation}
+s_c=p -\frac{\tau}{\mu}
+\end{equation}
+
+Then multiplying this through by $\mu$ yields:
+
+\begin{equation}
+\mu s_c =\mu p - \tau. \vspace{0.2cm}
+\end{equation}
+
+By substituting in equation \ref{eq:yield}, this is then equivalent to:
+
+\begin{equation}
+\bar{Y}  =Y - \tau, \vspace{0.2cm}
+\end{equation}
+
+where $\bar{Y}$ is the critical yield stress for sliding to occur at pressure amplitude $s_c$. This can be arranged further to give the vibrational strength (the yield strength of the material as a result of acoustic vibrations):
+
+\begin{equation}
+Y_{vib} = Y - \bar{Y} = \tau. \vspace{0.2cm}
+\end{equation} 
+
+Finally, using the definition of $\eta_{\text{eff}}$ \citep{collins2003acoustic} and the basic relationship between stress and strain rate, $\tau = \eta \dot{\epsilon}$, gives:
+
+\begin{equation} \label{eq:y_vib}
+Y_{vib} = \eta_{\text{eff}} \dot{\epsilon} \approx  \frac{\rho \lambda c_{p}}{2 \psi} \left[ \frac{1+\erf\left(\chi\right)}{1-\erf\left(\chi\right)} \right] \dot{\epsilon}.\vspace{0.2cm}
+\end{equation} 
+
+iSALE then either used the yield strength of the material, $Y_{mat}$, or the yield strength from vibrations, $Y_{vib}$, depending on which value was smallest. This is because, although acoustic vibrations may temporarily cause strengthening, $Y_{vib}$ should never be greater than $Y_{mat}$.
+
+A feature of equation \ref{eq:y_vib} is that as the strain rate decreases, so does the vibrational strength of the rock material. This results in significant weakening of material  in regions where the strain rate is very low. Thus, features far away from the impact may have a lowered strength due to a very slow rate of surface deformation. To avoid this, the same strain rate cut off variable that was used in \ref{sec:dissandregen} was applied here. If a cell's strain rate value was below this cut off value, no acoustic weakening of the cell would occur. This helped to avoid complete fluidisation of the rock material. 
