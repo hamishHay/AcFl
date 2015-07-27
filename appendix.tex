@@ -30,7 +30,7 @@ For each cell, the internal energy was also updated as energy became available f
 I_{n} = I_{n-1} + \frac{1}{\rho}\left[\frac{d \left(p + q\right)}{d t} + \tau \dot{\epsilon}\left(1-\frac{e}{2}\right)+\mathcal{E}_{dissipation}\right] dt.\vspace{0.2cm}
 \end{equation}
  
-Small stresses and strain rates may result in the generation of acoustic energy, as equation \ref{eq:regen_term} predicts. However, regions with extremely low strain rates far away from the point of impact would normally be mostly unaffected by the impact. To restrict acoustic fluidisation in these areas, a strain rate limit of $3\times10^{-3}$ s$^{-1}$ was set, i.e., for a cell with a strain rate lower than this value, $d\mathcal{E}_{regeneration}=0$.
+Small stresses and strain rates may result in the generation of acoustic energy, as equation \ref{eq:regen_term} predicts. However, regions with extremely low strain rates far away from the point of impact would normally be mostly unaffected by the impact. To restrict acoustic fluidization in these areas, a strain rate limit of $3\times10^{-3}$ s$^{-1}$ was set, i.e., for a cell with a strain rate lower than this value, $d\mathcal{E}_{regeneration}=0$.
 
 \subsubsection{Scattering \label{sec:scatter}}
 
@@ -59,7 +59,7 @@ where it is added to the new specific acoustic energy, as in equation \ref{eq:iS
 \subsubsection{Strength Model \label{sec:strength}}
 
 \begin{sloppypar}
-The effect of acoustic fluidisation on the rock strength, discussed in section \ref{sec:acfl}, was implemented in the \citet{collins2004modeling} strength model. iSALE updates the yield strength, $Y$, of the cells according to the user selected strength model at every time step. Yield strength is defined as:
+The effect of acoustic fluidization on the rock strength, discussed in section \ref{sec:acfl}, was implemented in the \citet{collins2004modeling} strength model. iSALE updates the yield strength, $Y$, of the cells according to the user selected strength model at every time step. Yield strength is defined as:
 \end{sloppypar}
 
 \begin{equation} \label{eq:yield}
@@ -98,4 +98,4 @@ Y_{vib} = \eta_{\text{eff}} \dot{\epsilon} \approx  \frac{\rho \lambda c_{p}}{2 
 
 iSALE then either used the yield strength of the material, $Y_{mat}$, or the yield strength from vibrations, $Y_{vib}$, depending on which value was smallest. This is because, although acoustic vibrations may temporarily cause strengthening, $Y_{vib}$ should never be greater than $Y_{mat}$.
 
-A feature of equation \ref{eq:y_vib} is that as the strain rate decreases, so does the vibrational strength of the rock material. This results in significant weakening of material  in regions where the strain rate is very low. Thus, features far away from the impact may have a lowered strength due to a very slow rate of surface deformation. To avoid this, the same strain rate cut off variable that was used in \ref{sec:dissandregen} was applied here. If a cell's strain rate value was below this cut off value, no acoustic weakening of the cell would occur. This helped to avoid complete fluidisation of the rock material. 
+A feature of equation \ref{eq:y_vib} is that as the strain rate decreases, so does the vibrational strength of the rock material. This results in significant weakening of material  in regions where the strain rate is very low. Thus, features far away from the impact may have a lowered strength due to a very slow rate of surface deformation. To avoid this, the same strain rate cut off variable that was used in \ref{sec:dissandregen} was applied here. If a cell's strain rate value was below this cut off value, no acoustic weakening of the cell would occur. This helped to avoid complete fluidization of the rock material. 
