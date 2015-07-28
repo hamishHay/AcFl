@@ -22,28 +22,15 @@ where the terms on the right hand side represents the work done against compress
 \frac{d \left(\rho I\right)}{d t} =\frac{d \left(p + q\right)}{d t} + \tau \dot{\epsilon}\left(1-\frac{e}{2}\right)+\frac{c_{p}}{\lambda Q}\mathcal{E}_{v}.\vspace{0.2cm}
 \end{equation}
 
-Finally, the first term from equation \ref{eqdedtmass} must also be included to account for the scattering of acoustic energy \citep{collins2002numerical}. This is simply diffusion of acoustic energy, as governed by the Laplace equation:
-
-\begin{equation} \label{eq:xydiff}
-\frac{d \mathcal{E}_{v} }{d t} = \frac{\xi}{4} \left( \frac{d^{2} \mathcal{E}_{v}}{d x^{2}} +\frac{d^{2} \mathcal{E}_{v}}{d y^{2}} \right),\vspace{0.2cm}
-\end{equation}
-
-or, for a cylindrical coordinate system with angular symmetry about the z-axis;
+Finally, the first term from equation \ref{eqdedtmass} must also be included to account for the scattering of acoustic energy \citep{collins2002numerical}. This is simply diffusion of acoustic energy, as governed by the Laplace equation, 
 
 \begin{equation} \label{eq:cyldiff}
 \frac{d \mathcal{E}_{v} }{d t} = \frac{\xi}{4}  \left( \frac{1}{r} \frac{d}{dr} \left( r \frac{d \mathcal{E}_{v}}{dr} \right) + \frac{d^{2} \mathcal{E}_{v}}{dz^{2}}   \right) .\vspace{0.2cm}
 \end{equation} 
 
+in a cylindrical coordinate system with angular symmetry about the z-axis.
+
 Equations \ref{eqdedtmass}, \ref{eq:iSaleInternalEnergyAcoustic}, and \ref{eq:cyldiff}, as well as the acoustic fluidization strength model (Equation \ref{eq:yield_vib}) were successfully implemented into the iSALE hydrocode. This is further detailed in \ref{app:modifications}.
-
-The scatter term subroutine implemented in iSALE was tested using a simple model. The initial conditions described a sphere of high acoustic energy, surrounded by zero acoustic energy. In this situatio, acoustic energy is expected to scatter into the sphere's surroundings. The errors between iSALE's solution and a second order explicit finite difference solution for various resolutions are shown in Figure \ref{fig:scatter_test}. The iSALE solution shows a greater than first order rate of convergence with decreasing grid size.
-
-\begin{figure}[!ht]
-		\centering
-		\includegraphics[width=\linewidth]{./images/scatter_test2.pdf}
-		%\captionsetup{width=0.58\linewidth}
-		\caption{Log-log plot of the errors between an explicit finite difference and iSALE's solutions to the scattering term in equation \ref{eqdedtmass}, using a test value of $\xi=10^{6}$ m$^2$ s$^{-1}$. The dashed line with a slope of one represents first order convergence. As the grid spacing is decreased, iSALE's solution converges with an order greater than unity.\label{fig:scatter_test}}
-\end{figure}\vspace{-0.3cm}
 
 \subsection{Models and their Parameters}\label{sec:parameters}
 
